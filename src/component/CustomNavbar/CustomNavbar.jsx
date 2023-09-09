@@ -1,16 +1,27 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Button, Container, Form, Navbar, Modal } from "react-bootstrap";
 import { FaArrowUp, FaArrowDown, FaPlus } from 'react-icons/fa';
 import { authContext } from "../AuthProvider/AuthProvider";
 
 const CustomNavbar = () => {
-    const { reload, setReload } = useContext(authContext);
+    const { reload, setReload, setAllContacts, allContacts } = useContext(authContext);
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         phoneNumber: "",
         email: ""
     });
+    const [searchText, setSearchText] = useState('');
+
+    useEffect(()=>{
+        let searchTextLength = searchText.length;
+        if(searchTextLength!==0){
+            const newContacts = allContacts.filter(e=>e.name==searchText);
+        setAllContacts(newContacts);
+        setReload(!reload)
+        }
+    },[searchText, allContacts, setAllContacts, reload, setReload])
+
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -56,12 +67,7 @@ const CustomNavbar = () => {
                 // Handle errors if the request fails
                 console.error("Error:", error);
             });
-    
-    
-    
-    event.target.reset();
-    
-        };
+    };
 
     return (
         <Container fluid className="px-0 mb-4">
@@ -76,6 +82,8 @@ const CustomNavbar = () => {
                                 placeholder="Contacts"
                                 className="me-2"
                                 aria-label="Search"
+
+                                onChange={e => setSearchText(e.target.value)}
                             />
                             <Button className="bg-white"> <FaArrowUp className="text-common-color" /> </Button>
                             <Button className="bg-white ms-2"> <FaArrowDown className="text-common-color" /> </Button>
