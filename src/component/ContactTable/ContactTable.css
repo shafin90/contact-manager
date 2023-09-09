@@ -3,10 +3,24 @@
 }
 
 /* ContactTable.css */
-.three-dot-icon {
-  
-    display: inline-block;
+
+.deleteAndUpdateSpan{
+    position: absolute;
+    right: 50px;
+}
+.threeDotBtnContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    
     position: absolute;
     right: 10px;
+}
+.threeDotBtnContainer:hover{
     cursor: pointer;
+    background-color: dimgrey;
+    transition: 0.4s;
 }

@@ -1,41 +1,47 @@
-// This is the table content of the component
-
-import { Container, Table } from "react-bootstrap";
+import { Container, Table, Dropdown, DropdownButton } from "react-bootstrap";
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { IoCallOutline } from 'react-icons/io5';
 import './ContactTable.css';
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { authContext } from "../AuthProvider/AuthProvider";
+import { GrDocumentUpdate } from 'react-icons/gr';
+import { AiFillDelete } from 'react-icons/ai';
 
 const ContactTable = () => {
-    const {allContacts} = useContext(authContext); // collecting data from authProvider through context API
-    const contacts = [
-        {
-            id: 1,
-            name: "John Doe",
-            phoneNumber: "555-123-4567",
-            email: "john.doe@example.com",
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            phoneNumber: "555-987-6543",
-            email: "jane.smith@example.com",
-        },
-        // Add more contact objects as needed
-    ];
+    const { allContacts } = useContext(authContext);
+    const [showMenu, setShowMenu] = useState(false);
+    const [selectedContact, setSelectedContact] = useState(null);
+    const [close, setClose] = useState(true);
+
+    const handleDeleteContact = () => {
+
+    }
+    const handleUpdateContact = () => {
+
+    }
+
+    const handleOpenMenu = (contact) => {
+        setSelectedContact(contact);
+        setShowMenu(true);
+    };
+
+    const handleCloseMenu = () => {
+        setSelectedContact(null);
+        setShowMenu(false);
+    };
+
+    
+    
 
     return (
         <Container fluid className="px-0">
             <Table striped bordered hover>
-                <thead >
-                    <tr >
-
+                <thead>
+                    <tr>
                         <th className="contact-column">
                             <input className="me-2" type="checkbox" />
                             Contacts
-
                             <BsThreeDotsVertical className="three-dot-icon" />
                         </th>
                         <th>CTA</th>
@@ -47,22 +53,34 @@ const ContactTable = () => {
                 <tbody>
                     {allContacts.map((contact) => (
                         <tr key={contact.id}>
-
                             <td className="contact-column d-flex align-items-center">
                                 <input type="checkbox" />
                                 <CgProfile className="mx-2" />
                                 <p className="d-inline-block ms-2 mb-0">{contact.name}</p>
-                                {/* <span className="three-dots-icon"></span> Add the three-dot icon */}
-                                <BsThreeDotsVertical className="three-dot-icon" />
-                            </td>
+                                <div  onClick={() =>{
+                                     handleOpenMenu(contact)
+                                     setClose(!close);
+                                     {close&&handleCloseMenu()}
+                                }} className="threeDotBtnContainer">
+                                    <BsThreeDotsVertical  className="three-dot-icon"  />
+                                </div>
 
+                                {showMenu && selectedContact && (
+                                    <span
+                                        className="d-inline-block deleteAndUpdateSpan"
+
+                                    >
+                                        <GrDocumentUpdate onClick={() => handleDeleteContact(selectedContact)} />
+                                        <AiFillDelete className="ms-2" onClick={() => handleUpdateContact(selectedContact)} />
+                                    </span>
+                                )}
+                            </td>
                             <td>
                                 <IoCallOutline />
                                 <IoCallOutline />
                                 <IoCallOutline />
                                 <IoCallOutline />
                                 <IoCallOutline />
-
                             </td>
                             <td>{contact.phoneNumber}</td>
                             <td>{contact.email}</td>
@@ -71,6 +89,8 @@ const ContactTable = () => {
                     ))}
                 </tbody>
             </Table>
+
+
         </Container>
     );
 };
