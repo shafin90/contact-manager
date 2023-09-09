@@ -16,7 +16,8 @@ const AuthProvider = ({ children }) => {
     const value = {
         allContacts,
         setReload,
-        reload
+        reload,
+        setAllContacts
     }
 
     return (

@@ -9,12 +9,25 @@ import { GrDocumentUpdate } from 'react-icons/gr';
 import { AiFillDelete } from 'react-icons/ai';
 
 const ContactTable = () => {
-    const { allContacts } = useContext(authContext);
+    const { allContacts, setAllContacts } = useContext(authContext);
     const [showMenu, setShowMenu] = useState(false);
     const [selectedContact, setSelectedContact] = useState(null);
     const [close, setClose] = useState(true);
 
-    const handleDeleteContact = () => {
+    const handleDeleteContact = (e) => {
+        console.log(e._id)
+        fetch(`http://localhost:5000/api/contacts/${e._id}`, {
+            method: 'DELETE'
+        })
+        .then(res=> res.json())
+        .then(data => {
+            console.log(data);
+            if(data.deletedCount>0){
+                alert('deleted successfully');
+                const remaining = allContacts.filter(contacts => contacts._id !== e._id);
+                setAllContacts(remaining); 
+            }
+        })
 
     }
     const handleUpdateContact = () => {
@@ -30,9 +43,6 @@ const ContactTable = () => {
         setSelectedContact(null);
         setShowMenu(false);
     };
-
-    
-    
 
     return (
         <Container fluid className="px-0">
@@ -57,21 +67,20 @@ const ContactTable = () => {
                                 <input type="checkbox" />
                                 <CgProfile className="mx-2" />
                                 <p className="d-inline-block ms-2 mb-0">{contact.name}</p>
-                                <div  onClick={() =>{
-                                     handleOpenMenu(contact)
-                                     setClose(!close);
-                                     {close&&handleCloseMenu()}
+                                <div onClick={() => {
+                                    handleOpenMenu(contact)
+                                    setClose(!close);
+                                    { close && handleCloseMenu() }
                                 }} className="threeDotBtnContainer">
-                                    <BsThreeDotsVertical  className="three-dot-icon"  />
+                                    <BsThreeDotsVertical className="three-dot-icon" />
                                 </div>
 
                                 {showMenu && selectedContact && (
                                     <span
                                         className="d-inline-block deleteAndUpdateSpan"
-
                                     >
-                                        <GrDocumentUpdate onClick={() => handleDeleteContact(selectedContact)} />
-                                        <AiFillDelete className="ms-2" onClick={() => handleUpdateContact(selectedContact)} />
+                                        <GrDocumentUpdate onClick={() => handleUpdateContact(selectedContact)}   />
+                                        <AiFillDelete className="ms-2" onClick={() => handleDeleteContact(contact)}  />
                                     </span>
                                 )}
                             </td>
