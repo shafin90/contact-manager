@@ -69,6 +69,23 @@ const CustomNavbar = () => {
             });
     };
 
+
+
+    const handleSortAscending = () => {
+        const sortedContacts = [...allContacts].sort((a, b) => {
+            return a.name.length - b.name.length;
+        });
+        setAllContacts(sortedContacts);
+    };
+
+    const handleSortDescending = () => {
+        const sortedContacts = [...allContacts].sort((a, b) => {
+            return b.name.length - a.name.length;
+        });
+        setAllContacts(sortedContacts);
+    };
+
+
     return (
         <Container fluid className="px-0 mb-4">
             <Navbar className="bg-common-color">
@@ -85,8 +102,10 @@ const CustomNavbar = () => {
 
                                 onChange={e => setSearchText(e.target.value)}
                             />
-                            <Button className="bg-white"> <FaArrowUp className="text-common-color" /> </Button>
-                            <Button className="bg-white ms-2"> <FaArrowDown className="text-common-color" /> </Button>
+                            {/* Arrow up button */}
+                            <Button onClick={handleSortAscending} className="bg-white"> <FaArrowUp className="text-common-color" /> </Button>
+                            {/* Arrow down button */}
+                            <Button onClick={handleSortDescending} className="bg-white ms-2"> <FaArrowDown className="text-common-color" /> </Button>
                             <Button className="bg-white ms-2" onClick={handleOpenModal}> <FaPlus className="text-common-color" /> </Button>
                         </Form>
                     </Navbar.Collapse>
