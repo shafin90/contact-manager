@@ -4,7 +4,7 @@ import { FaArrowUp, FaArrowDown, FaPlus } from 'react-icons/fa';
 import { authContext } from "../AuthProvider/AuthProvider";
 
 const CustomNavbar = () => {
-    const { name } = useContext(authContext);
+    const { reload, setReload } = useContext(authContext);
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -26,13 +26,42 @@ const CustomNavbar = () => {
     };
 
     const handleAddContact = () => {
-        // You can perform actions like sending the data to an API here
-        // For now, just log the data as an example
-        console.log("Added contact:", formData);
+        // Create an object with the form data
+        const contactData = {
+            name: formData.name,
+            phoneNumber: formData.phoneNumber,
+            email: formData.email
+        };
 
-        // Close the modal after adding the contact
-        handleCloseModal();
-    };
+        // Send the data to the server using the fetch API with the POST method
+        fetch("http://localhost:5000/api/contacts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(contactData),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // Handle the response from the server if needed
+                console.log("Server response:", data);
+
+                // Close the modal after adding the contact
+                handleCloseModal();
+
+                // Change the value of reload state so that, the useEffect to fetch data in authprovider fetch the data again.
+                setReload(!reload);
+            })
+            .catch((error) => {
+                // Handle errors if the request fails
+                console.error("Error:", error);
+            });
+    
+    
+    
+    event.target.reset();
+    
+        };
 
     return (
         <Container fluid className="px-0 mb-4">

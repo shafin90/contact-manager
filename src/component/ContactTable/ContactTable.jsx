@@ -5,8 +5,11 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { IoCallOutline } from 'react-icons/io5';
 import './ContactTable.css';
+import { useContext } from "react";
+import { authContext } from "../AuthProvider/AuthProvider";
 
 const ContactTable = () => {
+    const {allContacts} = useContext(authContext); // collecting data from authProvider through context API
     const contacts = [
         {
             id: 1,
@@ -42,7 +45,7 @@ const ContactTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {contacts.map((contact) => (
+                    {allContacts.map((contact) => (
                         <tr key={contact.id}>
 
                             <td className="contact-column d-flex align-items-center">
