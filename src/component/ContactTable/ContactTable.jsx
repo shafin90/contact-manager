@@ -1,4 +1,4 @@
-import { Container, Table, Dropdown, DropdownButton, Modal, Form, Button } from "react-bootstrap";
+import { Container, Table, Modal, Form, Button } from "react-bootstrap";
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { IoCallOutline } from 'react-icons/io5';
@@ -7,6 +7,9 @@ import { useContext, useState } from "react";
 import { authContext } from "../AuthProvider/AuthProvider";
 import { GrDocumentUpdate } from 'react-icons/gr';
 import { AiFillDelete } from 'react-icons/ai';
+import { TbMessageMinus } from 'react-icons/tb';
+import { BsWhatsapp } from 'react-icons/bs';
+import { SlEnvolopeLetter } from 'react-icons/sl'
 
 const ContactTable = () => {
     const { allContacts, setAllContacts, setReload, reload } = useContext(authContext);
@@ -18,10 +21,11 @@ const ContactTable = () => {
     const [updatedPhoneNumber, setUpdatedPhoneNumber] = useState("");
     const [updatedEmail, setUpdatedEmail] = useState("");
     const [id, setId] = useState('');
+    const [newContact, setNewContact] = useState([])
 
     const handleDeleteContact = (e) => {
         console.log(e._id)
-        fetch(`http://localhost:5000/api/contacts/${e._id}`, {
+        fetch(`https://contact-manager-server-sc28.vercel.app/api/contacts/${e._id}`, {
             method: 'DELETE'
         })
             .then(res => res.json())
@@ -39,12 +43,16 @@ const ContactTable = () => {
 
 
     const handleOpenMenu = (contact) => {
+        const newContact = allContacts.find(e => e._id == contact._id)
+        setNewContact(newContact)
+
         setSelectedContact(contact);
         setShowMenu(true);
     };
     const handleCloseMenu = () => {
         setSelectedContact(null);
         setShowMenu(false);
+        setNewContact(null)
     };
 
     const handleUpdateContact = (event) => {
@@ -70,12 +78,12 @@ const ContactTable = () => {
 
     const handleSaveUpdatedContact = () => {
         // Save the updated contact details (you can add your logic here)
-        fetch(`http://localhost:5000/api/contacts/${id}`, {
+        fetch(`https://contact-manager-server-sc28.vercel.app/api/contacts/${id}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify({updatedName,updatedEmail,updatedPhoneNumber})
+            body: JSON.stringify({ updatedName, updatedEmail, updatedPhoneNumber })
         })
             .then(res => res.json())
             .then(data => {
@@ -88,7 +96,7 @@ const ContactTable = () => {
         handleCloseUpdateModal();
     };
 
- 
+
 
     return (
         <Container fluid className="px-0">
@@ -98,21 +106,26 @@ const ContactTable = () => {
                         <th className="contact-column">
                             <input className="me-2" type="checkbox" />
                             Contacts
-                            <BsThreeDotsVertical className="three-dot-icon" />
+                            <div className="threeDotBtnContainer threeDotOnHeading">
+                                <BsThreeDotsVertical className="three-dot-icon" />
+                            </div>
                         </th>
-                        <th>CTA</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        <th>Current Date</th>
+                        <th className="text-center">CTA</th>
+                        <th className="text-center">Mobile</th>
+                        <th className="text-center">Email</th>
+                        <th className="text-center">Current Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     {allContacts.map((contact) => (
                         <tr key={contact.id}>
+
                             <td className="contact-column d-flex align-items-center">
+
                                 <input type="checkbox" />
                                 <CgProfile className="mx-2" />
                                 <p className="d-inline-block ms-2 mb-0">{contact.name}</p>
+
                                 <div onClick={() => {
                                     handleOpenMenu(contact)
                                     setClose(!close);
@@ -121,7 +134,7 @@ const ContactTable = () => {
                                     <BsThreeDotsVertical className="three-dot-icon" />
                                 </div>
 
-                                {showMenu && selectedContact && (
+                                {newContact?._id == contact._id && (
                                     <span
                                         className="d-inline-block deleteAndUpdateSpan"
                                     >
@@ -132,16 +145,17 @@ const ContactTable = () => {
                                     </span>
                                 )}
                             </td>
-                            <td>
-                                <IoCallOutline />
-                                <IoCallOutline />
-                                <IoCallOutline />
-                                <IoCallOutline />
-                                <IoCallOutline />
+
+                            <td className="text-center">
+                                <IoCallOutline className="me-2" />
+                                <TbMessageMinus className="me-2" />
+                                <BsWhatsapp className="me-2" />
+                                <SlEnvolopeLetter />
+
                             </td>
-                            <td>{contact.phoneNumber}</td>
-                            <td>{contact.email}</td>
-                            <td>Date loading...</td>
+                            <td className="text-center">{contact.phoneNumber}</td>
+                            <td className="text-center">{contact.email}</td>
+                            <td className="text-center">{contact.date}</td>
                         </tr>
                     ))}
                 </tbody>

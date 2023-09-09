@@ -24,3 +24,6 @@
     background-color: dimgrey;
     transition: 0.4s;
 }
+.threeDotOnHeading{
+    bottom: 10px;
+}

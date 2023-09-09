@@ -36,16 +36,29 @@ const CustomNavbar = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+        // Create a new Date object
+        const currentDate = new Date();
+
+        // Get the current date components
+        const day = currentDate.getDate();
+        const month = currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
+        const year = currentDate.getFullYear();
+    
+        // Create a formatted date string
+        const formattedDate = `${day}/${month}/${year}`;
+    
+
     const handleAddContact = () => {
         // Create an object with the form data
         const contactData = {
             name: formData.name,
             phoneNumber: formData.phoneNumber,
-            email: formData.email
+            email: formData.email,
+            date : formattedDate
         };
 
         // Send the data to the server using the fetch API with the POST method
-        fetch("http://localhost:5000/api/contacts", {
+        fetch("https://contact-manager-server-sc28.vercel.app/api/contacts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
