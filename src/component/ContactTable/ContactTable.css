@@ -1,0 +1,12 @@
+.contact-column{
+    position: relative;
+}
+
+/* ContactTable.css */
+.three-dot-icon {
+  
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
