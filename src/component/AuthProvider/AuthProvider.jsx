@@ -7,7 +7,7 @@ const AuthProvider = ({ children }) => {
 
     // Loading all contacts
     useEffect(() => {
-        fetch("http://localhost:5000/api/contacts")
+        fetch("https://contact-manager-server-sc28.vercel.app/api/contacts")
             .then(res => res.json())
             .then(data => setAllContacts(data))
     }, [reload])
