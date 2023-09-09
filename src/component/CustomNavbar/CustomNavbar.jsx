@@ -1,26 +1,33 @@
+// This is the navbar of this web application.
+
 import { useState, useContext, useEffect } from "react";
 import { Button, Container, Form, Navbar, Modal } from "react-bootstrap";
 import { FaArrowUp, FaArrowDown, FaPlus } from 'react-icons/fa';
 import { authContext } from "../AuthProvider/AuthProvider";
 
 const CustomNavbar = () => {
-    const { reload, setReload, setAllContacts, allContacts } = useContext(authContext);
+    const { reload, setReload, setAllContacts, allContacts } = useContext(authContext); // Collecting data from authProvider through context API.
+
+
+    // State declaration of this component
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         phoneNumber: "",
         email: ""
     });
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState(''); // This state hold the text, what user search on searchbar.
 
-    useEffect(()=>{
+
+    // Here, user searching a contact information by name.
+    useEffect(() => {
         let searchTextLength = searchText.length;
-        if(searchTextLength!==0){
-            const newContacts = allContacts.filter(e=>e.name==searchText);
-        setAllContacts(newContacts);
-        setReload(!reload)
+        if (searchTextLength !== 0) {
+            const newContacts = allContacts.filter(e => e.name == searchText);
+            setAllContacts(newContacts);
+            setReload(!reload)
         }
-    },[searchText, allContacts, setAllContacts, reload, setReload])
+    }, [searchText, allContacts, setAllContacts, reload, setReload])
 
 
     const handleOpenModal = () => {
@@ -36,17 +43,17 @@ const CustomNavbar = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-        // Create a new Date object
-        const currentDate = new Date();
+    // Create a new Date object
+    const currentDate = new Date();
 
-        // Get the current date components
-        const day = currentDate.getDate();
-        const month = currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
-        const year = currentDate.getFullYear();
-    
-        // Create a formatted date string
-        const formattedDate = `${day}/${month}/${year}`;
-    
+    // Get the current date components
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; // Months are zero-indexed, so add 1
+    const year = currentDate.getFullYear();
+
+    // Create a formatted date string
+    const formattedDate = `${day}/${month}/${year}`;
+
 
     const handleAddContact = () => {
         // Create an object with the form data
@@ -54,7 +61,7 @@ const CustomNavbar = () => {
             name: formData.name,
             phoneNumber: formData.phoneNumber,
             email: formData.email,
-            date : formattedDate
+            date: formattedDate
         };
 
         // Send the data to the server using the fetch API with the POST method
@@ -83,7 +90,7 @@ const CustomNavbar = () => {
     };
 
 
-
+    // Function to sort contact information ascending way based on the length of Name
     const handleSortAscending = () => {
         const sortedContacts = [...allContacts].sort((a, b) => {
             return a.name.length - b.name.length;
@@ -91,6 +98,7 @@ const CustomNavbar = () => {
         setAllContacts(sortedContacts);
     };
 
+    // Function to sort contact information  descending way based on the length of Name
     const handleSortDescending = () => {
         const sortedContacts = [...allContacts].sort((a, b) => {
             return b.name.length - a.name.length;

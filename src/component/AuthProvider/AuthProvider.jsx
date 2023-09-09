@@ -1,9 +1,11 @@
 import { createContext, useEffect, useState } from "react";
 
 export const authContext = createContext();
+
 const AuthProvider = ({ children }) => {
     const [allContacts, setAllContacts] = useState([]); //This state hold all the contacts
     const [reload, setReload] = useState(true) // This state tell useEffect to fetch data again when this state get changed through POST method
+
 
     // Loading all contacts
     useEffect(() => {

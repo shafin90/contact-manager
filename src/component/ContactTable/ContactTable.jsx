@@ -12,6 +12,7 @@ import { BsWhatsapp } from 'react-icons/bs';
 import { SlEnvolopeLetter } from 'react-icons/sl'
 
 const ContactTable = () => {
+    // State Declaration for this component
     const { allContacts, setAllContacts, setReload, reload } = useContext(authContext);
     const [showMenu, setShowMenu] = useState(false);
     const [selectedContact, setSelectedContact] = useState(null);
@@ -23,6 +24,8 @@ const ContactTable = () => {
     const [id, setId] = useState('');
     const [newContact, setNewContact] = useState([])
 
+
+    // Function to delete any row from the table
     const handleDeleteContact = (e) => {
         console.log(e._id)
         fetch(`https://contact-manager-server-sc28.vercel.app/api/contacts/${e._id}`, {
@@ -42,6 +45,7 @@ const ContactTable = () => {
 
 
 
+    // When user click on three dot icon, a menu is opened besides that having two icon, 1.update  2.delete
     const handleOpenMenu = (contact) => {
         const newContact = allContacts.find(e => e._id == contact._id)
         setNewContact(newContact)
@@ -49,12 +53,17 @@ const ContactTable = () => {
         setSelectedContact(contact);
         setShowMenu(true);
     };
+
+    
+    // This is the function to close menu on which in previous comment has been talked.
     const handleCloseMenu = () => {
         setSelectedContact(null);
         setShowMenu(false);
         setNewContact(null)
     };
 
+
+    // This is the function to update a row.
     const handleUpdateContact = (event) => {
         // Open the update modal
         setShowUpdateModal(true);
@@ -68,6 +77,8 @@ const ContactTable = () => {
         setUpdatedEmail(selectedContact.email);
     };
 
+    
+    // This function is resposible to close modal.
     const handleCloseUpdateModal = () => {
         // Close the update modal and reset the form fields
         setShowUpdateModal(false);
@@ -76,6 +87,8 @@ const ContactTable = () => {
         setUpdatedEmail("");
     };
 
+
+    // When user update any information, this function save that information to database.
     const handleSaveUpdatedContact = () => {
         // Save the updated contact details (you can add your logic here)
         fetch(`https://contact-manager-server-sc28.vercel.app/api/contacts/${id}`, {
